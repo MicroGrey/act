@@ -32,7 +32,7 @@ def export_act_to_onnx(
     # 构建模型并加载权重
     policy = ACTPolicy(policy_config)
     state_dict = torch.load(ckpt_path, map_location='cpu')
-    policy.load_state_dict(state_dict, strict=False)
+    policy.load_state_dict(state_dict, strict=True)
     policy.eval().cuda()
 
     # 构造假输入
@@ -63,8 +63,8 @@ def export_act_to_onnx(
 
 if __name__ == "__main__":
     export_act_to_onnx(
-        ckpt_path="outputs/policy_best.ckpt",
-        output_path="outputs/policy_act.onnx",
+        ckpt_path="ckpt/with_temp/policy_best.ckpt",
+        output_path="ckpt/with_temp/policy_act.onnx",
         camera_names=["top"],  
         chunk_size=8,
         hidden_dim=512,
@@ -73,11 +73,11 @@ if __name__ == "__main__":
     
 '''
  python export.py \
-    --ckpt_dir ckpt \
+    --ckpt_dir ckpt/with_temp \
     --policy_class ACT \
     --task_name sim_transfer_cube_scripted \
     --seed 0 \
-    --num_epochs 200 \
+    --num_epochs 10000 \
     --chunk_size 100 \
     --hidden_dim 512 \
     --dim_feedforward 3200 \
